@@ -24,6 +24,9 @@
         9F000001000000000000000D /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F000001000000000000000E /* Toast.swift */; };
         9F000001000000000000000F /* CelebrationOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F0000010000000000000010 /* CelebrationOverlay.swift */; };
         9F0000010000000000000013 /* ScreenshotMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F0000010000000000000012 /* ScreenshotMode.swift */; };
+        FCF000010000000000000001 /* FlashcardsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF000010000000000000002 /* FlashcardsData.swift */; };
+        FCF000010000000000000003 /* LevelSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF000010000000000000004 /* LevelSelectView.swift */; };
+        FCF000010000000000000005 /* FlashcardsGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF000010000000000000006 /* FlashcardsGameView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +49,9 @@
         9F000001000000000000000E /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
         9F0000010000000000000010 /* CelebrationOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelebrationOverlay.swift; sourceTree = "<group>"; };
         9F0000010000000000000012 /* ScreenshotMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotMode.swift; sourceTree = "<group>"; };
+        FCF000010000000000000002 /* FlashcardsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardsData.swift; sourceTree = "<group>"; };
+        FCF000010000000000000004 /* LevelSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelSelectView.swift; sourceTree = "<group>"; };
+        FCF000010000000000000006 /* FlashcardsGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardsGameView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +98,9 @@
                 9F0000010000000000000004 /* HistoryView.swift */,
                 9F0000010000000000000006 /* SettingsView.swift */,
                 9F0000010000000000000012 /* ScreenshotMode.swift */,
+                FCF000010000000000000002 /* FlashcardsData.swift */,
+                FCF000010000000000000004 /* LevelSelectView.swift */,
+                FCF000010000000000000006 /* FlashcardsGameView.swift */,
                 7A8B9C1D2E3F4567890ABCE7 /* NotesModel.xcdatamodeld */,
                 7A8B9C1D2E3F4567890ABCE3 /* Assets.xcassets */,
                 7A8B9C1D2E3F4567890ABCF8 /* Preview Content */,
@@ -192,6 +201,9 @@
                 9F000001000000000000000D /* Toast.swift in Sources */,
                 9F000001000000000000000F /* CelebrationOverlay.swift in Sources */,
                 9F0000010000000000000013 /* ScreenshotMode.swift in Sources */,
+                FCF000010000000000000001 /* FlashcardsData.swift in Sources */,
+                FCF000010000000000000003 /* LevelSelectView.swift in Sources */,
+                FCF000010000000000000005 /* FlashcardsGameView.swift in Sources */,
             );
 			runOnlyForDeploymentPostprocessing = 0;
 		};
