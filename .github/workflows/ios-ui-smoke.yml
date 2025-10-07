@@ -1,0 +1,37 @@
+name: iOS UI Smoke
+
+on:
+  workflow_dispatch:
+    inputs:
+      scheme:
+        description: Xcode scheme name
+        required: false
+        default: NotesApp
+  push:
+    branches: [ main ]
+    paths:
+      - 'NotesApp/**'
+      - 'NotesApp.xcodeproj/**'
+      - 'fastlane/**'
+      - '.github/workflows/ios-ui-smoke.yml'
+
+jobs:
+  ui-smoke:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby and install fastlane
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Bundle install
+        run: bundle install --path vendor/bundle
+
+      - name: Run UI smoke via fastlane
+        env:
+          SCHEME: ${{ github.event.inputs.scheme || 'NotesApp' }}
+        run: bundle exec fastlane ios ui_smoke scheme:"$SCHEME"
+

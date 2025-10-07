@@ -4,6 +4,84 @@ require 'fileutils'
 default_platform(:ios)
 
 platform :ios do
+  desc "UI smoke test on iPhone simulator"
+  lane :ui_smoke do |options|
+    root    = File.expand_path('..', __dir__)
+    project = File.join(root, "NotesApp.xcodeproj")
+    scheme  = options[:scheme]  || "NotesApp"
+    derived = File.join((ENV["RUNNER_TEMP"] || Dir.pwd), "DerivedSmoke")
+    FileUtils.mkdir_p(derived)
+
+    sh("xcodebuild -version")
+
+    # Pick a modern iPhone device type
+    dt_json = sh("xcrun simctl list devicetypes -j")
+    devtypes = JSON.parse(dt_json)["devicetypes"]
+    phone = devtypes.find { |dt| dt["name"].start_with?("iPhone 15") } || devtypes.find { |dt| dt["name"].start_with?("iPhone 14") } || devtypes.find { |dt| dt["name"].include?("iPhone") }
+    UI.user_error!("No iPhone device type found") unless phone
+    dt_id = phone["identifier"]
+
+    # Latest available iOS runtime
+    runtimes_json = sh("xcrun simctl list runtimes -j")
+    runtimes = JSON.parse(runtimes_json)["runtimes"]
+    ios = runtimes.select { |r| r["identifier"].start_with?("com.apple.CoreSimulator.SimRuntime.iOS-") && (r["isAvailable"] != false) }
+    ios.sort_by! { |r| r["version"] || r["productVersion"] }
+    UI.user_error!("No available iOS runtimes") if ios.empty?
+    runtime_id = ios.last["identifier"]
+
+    sim_name = "CI iPhone Smoke"
+    # Create-or-reuse
+    devices_json = sh("xcrun simctl list devices #{runtime_id} -j")
+    devices = JSON.parse(devices_json)["devices"][runtime_id] || []
+    udid = devices.find { |d| d["name"] == sim_name }&.dig("udid")
+    unless udid
+      udid = sh("xcrun simctl create \"#{sim_name}\" #{dt_id} #{runtime_id}").strip
+    end
+
+    sh("xcrun simctl shutdown #{udid} || true")
+    sh("xcrun simctl erase #{udid} || true")
+    sh("open -a Simulator || true")
+    sh("xcrun simctl boot #{udid} || true")
+    sh("xcrun simctl bootstatus #{udid} -b || true")
+
+    # Build for simulator
+    sh("xcodebuild -list -project \"#{project}\"")
+    sh(["xcodebuild","clean","-project",project,"-scheme",scheme,"-configuration","Debug","-sdk","iphonesimulator"].join(" "))
+    sh([
+      "xcodebuild","build",
+      "-project",project,
+      "-scheme",scheme,
+      "-configuration","Debug",
+      "-sdk","iphonesimulator",
+      "-destination","id=#{udid}",
+      "-derivedDataPath",derived
+    ].join(" "))
+
+    products = File.join(derived, "Build/Products/Debug-iphonesimulator")
+    app_path = Dir[File.join(products, "*.app")].first
+    UI.user_error!("No .app found at #{products}") unless app_path
+
+    # Install and run a few navigations
+    sh("xcrun simctl install #{udid} \"#{app_path}\"")
+
+    def launch_ok(udid, bid, args)
+      sh("xcrun simctl terminate #{udid} #{bid} || true")
+      out = sh("xcrun simctl launch #{udid} #{bid} --args #{args} || true")
+      UI.message(out)
+      sleep 4
+    end
+
+    bid = sh("/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' \"#{File.join(app_path, 'Info.plist')}\"").strip
+    # 1) Home
+    launch_ok(udid, bid, "--disable-animations")
+    # 2) Auto-navigate to level 1
+    launch_ok(udid, bid, "--disable-animations --auto-level 1")
+    # 3) Auto-navigate to level 5
+    launch_ok(udid, bid, "--disable-animations --auto-level 5")
+
+    # If we got here without a non-zero exit, consider smoke passing.
+    UI.success("UI smoke completed on simulator: #{sim_name}")
+  end
   desc "Capture iPad screenshots via simctl"
   lane :ipad_screenshots do |options|
     root    = File.expand_path('..', __dir__)

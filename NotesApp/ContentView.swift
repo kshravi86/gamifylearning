@@ -1,8 +1,10 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var navPath = NavigationPath()
+
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navPath) {
             VStack(spacing: 20) {
                 Text("Python Flashcards")
                     .font(.largeTitle.bold())
@@ -46,6 +48,17 @@ struct ContentView: View {
                     }
                 }
             }
+            .onAppear { applyLaunchNavigation() }
+        }
+    }
+}
+
+private extension ContentView {
+    func applyLaunchNavigation() {
+        let args = ProcessInfo.processInfo.arguments
+        if let i = args.firstIndex(of: "--auto-level"), i + 1 < args.count, let lvl = Int(args[i + 1]) {
+            // push the level value to trigger navigationDestination
+            navPath.append(lvl)
         }
     }
 }
