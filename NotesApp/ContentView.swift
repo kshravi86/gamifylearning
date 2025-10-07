@@ -31,6 +31,11 @@ struct ContentView: View {
                         LevelSelectView()
                     }
                 }
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink("Logs") {
+                        ErrorLogView()
+                    }
+                }
             }
         }
     }

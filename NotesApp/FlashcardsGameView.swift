@@ -20,10 +20,11 @@ struct FlashcardsGameView: View {
         .padding()
         .navigationTitle("Level \(deck.level)")
         .navigationBarTitleDisplayMode(.inline)
-        .onAppear { start() }
+        .onAppear {
+            if order.isEmpty { start(resetScore: false) }
+        }
         .sheet(isPresented: $finished) {
-            ResultSheet(score: correct, total: deck.cards.count) {
-                // retry
+            ResultSheet(score: correct, total: deck.cards.count, onClose: { finished = false }) {
                 start(resetScore: true)
                 finished = false
             }
@@ -41,8 +42,20 @@ struct FlashcardsGameView: View {
     }
 
     private var card: some View {
-        let c = current
-        return VStack(alignment: .leading, spacing: 12) {
+        guard let c = safeCurrent else {
+            return AnyView(
+                VStack(spacing: 12) {
+                    ProgressView("Preparing cards…")
+                    Text("Level \(deck.level): \(deck.title)")
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, maxHeight: 200)
+                .padding()
+                .background(.thinMaterial)
+                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            )
+        }
+        return AnyView(VStack(alignment: .leading, spacing: 12) {
             Text(c.prompt)
                 .font(.title3.weight(.semibold))
             if let hint = c.hint, !showAnswer {
@@ -62,7 +75,7 @@ struct FlashcardsGameView: View {
                 Text("Tap ‘Show Answer’ to reveal")
                     .foregroundStyle(.secondary)
             }
-        }
+        })
         .padding(16)
         .frame(maxWidth: .infinity, maxHeight: 320)
         .background(.thinMaterial)
@@ -92,7 +105,7 @@ struct FlashcardsGameView: View {
 
     private var progress: some View {
         VStack(alignment: .leading, spacing: 6) {
-            ProgressView(value: Double(index), total: Double(deck.cards.count))
+            ProgressView(value: Double(min(index, deck.cards.count)), total: Double(deck.cards.count))
             HStack {
                 Text("Correct: \(correct)")
                 Spacer()
@@ -103,8 +116,9 @@ struct FlashcardsGameView: View {
         }
     }
 
-    private var current: Flashcard {
-        deck.cards[order[index]]
+    private var safeCurrent: Flashcard? {
+        guard !order.isEmpty, index >= 0, index < order.count, order[index] < deck.cards.count else { return nil }
+        return deck.cards[order[index]]
     }
 
     private func start(resetScore: Bool = false) {
@@ -129,6 +143,7 @@ struct FlashcardsGameView: View {
 private struct ResultSheet: View {
     let score: Int
     let total: Int
+    var onClose: () -> Void
     var onRetry: () -> Void
 
     var body: some View {
@@ -142,12 +157,7 @@ private struct ResultSheet: View {
                 Text("You got \(score) out of \(total) correct.")
                     .foregroundStyle(.secondary)
                 HStack {
-                    Button(role: .cancel) {
-                        // Close sheet by doing nothing; presenting view handles dismissal
-                        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-                            scene.keyWindow?.rootViewController?.dismiss(animated: true)
-                        }
-                    } label: { Text("Done") }
+                    Button(role: .cancel) { onClose() } label: { Text("Done") }
                     Button(action: onRetry) { Text("Retry Level") }
                         .buttonStyle(.borderedProminent)
                 }
@@ -159,10 +169,3 @@ private struct ResultSheet: View {
         }
     }
 }
-
-// Helpers to dismiss sheet from within
-import UIKit
-extension UIWindowScene {
-    var keyWindow: UIWindow? { self.windows.first(where: { $0.isKeyWindow }) }
-}
-

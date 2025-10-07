@@ -104,6 +104,9 @@
                 7A8B9C1D2E3F4567890ABCE7 /* NotesModel.xcdatamodeld */,
                 7A8B9C1D2E3F4567890ABCE3 /* Assets.xcassets */,
                 7A8B9C1D2E3F4567890ABCF8 /* Preview Content */,
+                FCF000010000000000000008 /* ErrorLogger.swift */,
+                FCF00001000000000000000A /* CrashHandler.swift */,
+                FCF00001000000000000000C /* ErrorLogView.swift */,
 			);
 			path = NotesApp;
 			sourceTree = "<group>";
@@ -204,6 +207,9 @@
                 FCF000010000000000000001 /* FlashcardsData.swift in Sources */,
                 FCF000010000000000000003 /* LevelSelectView.swift in Sources */,
                 FCF000010000000000000005 /* FlashcardsGameView.swift in Sources */,
+                FCF000010000000000000007 /* ErrorLogger.swift in Sources */,
+                FCF000010000000000000009 /* CrashHandler.swift in Sources */,
+                FCF00001000000000000000B /* ErrorLogView.swift in Sources */,
             );
 			runOnlyForDeploymentPostprocessing = 0;
 		};
