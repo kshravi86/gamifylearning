@@ -55,31 +55,33 @@ struct FlashcardsGameView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
             )
         }
-        return AnyView(VStack(alignment: .leading, spacing: 12) {
-            Text(c.prompt)
-                .font(.title3.weight(.semibold))
-            if let hint = c.hint, !showAnswer {
-                Text("Hint: \(hint)")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            }
-            Divider()
-            if showAnswer {
-                ScrollView {
-                    Text(c.answer)
-                        .font(.system(.body, design: .monospaced))
-                        .frame(maxWidth: .infinity, alignment: .leading)
+        return AnyView(
+            VStack(alignment: .leading, spacing: 12) {
+                Text(c.prompt)
+                    .font(.title3.weight(.semibold))
+                if let hint = c.hint, !showAnswer {
+                    Text("Hint: \(hint)")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
                 }
-                .transition(.opacity)
-            } else {
-                Text("Tap ‘Show Answer’ to reveal")
-                    .foregroundStyle(.secondary)
+                Divider()
+                if showAnswer {
+                    ScrollView {
+                        Text(c.answer)
+                            .font(.system(.body, design: .monospaced))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .transition(.opacity)
+                } else {
+                    Text("Tap ‘Show Answer’ to reveal")
+                        .foregroundStyle(.secondary)
+                }
             }
-        })
-        .padding(16)
-        .frame(maxWidth: .infinity, maxHeight: 320)
-        .background(.thinMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .padding(16)
+            .frame(maxWidth: .infinity, maxHeight: 320)
+            .background(.thinMaterial)
+            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        )
     }
 
     private var controls: some View {
