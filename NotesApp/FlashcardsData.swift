@@ -45,7 +45,7 @@ enum FlashcardsRepository {
             cards: [
                 Flashcard(prompt: "First 3 chars of s", answer: "s[:3]", hint: "slice start:stop"),
                 Flashcard(prompt: "Last char of s", answer: "s[-1]", hint: "Negative index"),
-                Flashcard(prompt: "Format name='Ada' and age=30", answer: "f""{name} is {age}""", hint: "Use f-strings"),
+                Flashcard(prompt: "Format name='Ada' and age=30", answer: "f\"{name} is {age}\"", hint: "Use f-strings"),
                 Flashcard(prompt: "Make 'Hello' lowercase", answer: "'Hello'.lower()", hint: ".lower() method")
             ]
         ),
@@ -138,4 +138,3 @@ final class ProgressStore {
 
     private func key(_ level: Int) -> String { "level_\(level)_best" }
 }
-
