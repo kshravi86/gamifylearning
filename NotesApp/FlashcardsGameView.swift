@@ -6,9 +6,11 @@ struct FlashcardsGameView: View {
 
     @State private var index: Int = 0
     @State private var order: [Int] = []
-    @State private var showAnswer: Bool = false
     @State private var correct: Int = 0
     @State private var finished: Bool = false
+    @State private var options: [String] = []
+    @State private var correctOption: String = ""
+    @State private var selectedIndex: Int? = nil
 
     var body: some View {
         VStack(spacing: 16) {
@@ -59,22 +61,32 @@ struct FlashcardsGameView: View {
             VStack(alignment: .leading, spacing: 12) {
                 Text(c.prompt)
                     .font(.title3.weight(.semibold))
-                if let hint = c.hint, !showAnswer {
+                if let hint = c.hint, selectedIndex == nil {
                     Text("Hint: \(hint)")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                 }
                 Divider()
-                if showAnswer {
-                    ScrollView {
-                        Text(c.answer)
-                            .font(.system(.body, design: .monospaced))
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                VStack(spacing: 10) {
+                    ForEach(Array(options.enumerated()), id: \.0) { (i, opt) in
+                        Button(action: { choose(i) }) {
+                            HStack {
+                                Text(opt)
+                                    .font(.system(.body, design: .monospaced))
+                                    .foregroundColor(foregroundColor(for: i))
+                                Spacer()
+                                if selectedIndex != nil {
+                                    Image(systemName: iconName(for: i))
+                                        .foregroundColor(foregroundColor(for: i))
+                                }
+                            }
+                            .padding(12)
+                            .frame(maxWidth: .infinity)
+                            .background(backgroundColor(for: i))
+                            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                        }
+                        .disabled(selectedIndex != nil)
                     }
-                    .transition(.opacity)
-                } else {
-                    Text("Tap ‘Show Answer’ to reveal")
-                        .foregroundStyle(.secondary)
                 }
             }
             .padding(16)
@@ -86,23 +98,15 @@ struct FlashcardsGameView: View {
 
     private var controls: some View {
         HStack(spacing: 12) {
-            Button(action: { withAnimation { showAnswer.toggle() } }) {
-                Label(showAnswer ? "Hide Answer" : "Show Answer", systemImage: showAnswer ? "eye.slash" : "eye")
-            }
-            .buttonStyle(.bordered)
-
             Spacer()
-
-            Button(role: .destructive) { next(correct: false) } label: {
-                Label("Need Review", systemImage: "xmark.circle")
-            }
-            .buttonStyle(.bordered)
-
-            Button { next(correct: true) } label: {
-                Label("I Got It", systemImage: "checkmark.circle.fill")
+            Button {
+                proceed()
+            } label: {
+                Text(index + 1 >= deck.cards.count ? "Finish" : (selectedIndex == nil ? "Skip" : "Next"))
             }
             .buttonStyle(.borderedProminent)
         }
+        .padding(.top, 4)
     }
 
     private var progress: some View {
@@ -126,19 +130,66 @@ struct FlashcardsGameView: View {
     private func start(resetScore: Bool = false) {
         order = Array(deck.cards.indices).shuffled()
         index = 0
-        showAnswer = false
         if resetScore { correct = 0 }
+        buildRound()
     }
 
-    private func next(correct gotIt: Bool) {
-        if gotIt { correct += 1 }
+    private func proceed() {
         if index + 1 >= deck.cards.count {
             onFinish?(correct)
             finished = true
         } else {
             index += 1
-            showAnswer = false
+            buildRound()
         }
+    }
+
+    private func choose(_ i: Int) {
+        guard selectedIndex == nil else { return }
+        selectedIndex = i
+        if options.indices.contains(i) && options[i] == correctOption {
+            correct += 1
+        }
+    }
+
+    private func buildRound() {
+        selectedIndex = nil
+        guard let c = safeCurrent else { options = []; correctOption = ""; return }
+        let correctAns = c.answer
+        var distractors = deck.cards.map { $0.answer }.filter { $0 != correctAns }
+        distractors.shuffle()
+        if distractors.count < 3 {
+            let fillers = ["pass", "None", "True", "False", "print(x)", "len(s)"]
+            for f in fillers where distractors.count < 3 && f != correctAns {
+                distractors.append(f)
+            }
+        }
+        let picks = Array(distractors.prefix(3))
+        var opts = [correctAns] + picks
+        opts.shuffle()
+        options = opts
+        correctOption = correctAns
+    }
+
+    private func backgroundColor(for i: Int) -> Color {
+        guard let sel = selectedIndex else { return Color.gray.opacity(0.12) }
+        let isCorrect = options[i] == correctOption
+        if isCorrect { return Color.green.opacity(0.18) }
+        if sel == i { return Color.red.opacity(0.18) }
+        return Color.gray.opacity(0.12)
+    }
+
+    private func foregroundColor(for i: Int) -> Color {
+        guard let sel = selectedIndex else { return Color.primary }
+        let isCorrect = options[i] == correctOption
+        if isCorrect { return .green }
+        if sel == i { return .red }
+        return .primary
+    }
+
+    private func iconName(for i: Int) -> String {
+        let isCorrect = options[i] == correctOption
+        return isCorrect ? "checkmark.circle.fill" : "xmark.circle"
     }
 }
 
