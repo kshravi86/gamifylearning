@@ -62,16 +62,18 @@ jobs:
         run: |
           set -euo pipefail
           APP_DIR="$DERIVED_DATA/Build/Products/$CONFIGURATION-iphoneos"
-          echo "Looking for .app in: $APP_DIR"
-          APP_PATH=$(ls -1 "$APP_DIR"/*.app | head -n1)
-          if [[ -z "$APP_PATH" ]]; then
+          echo "Looking for .app in: $APP_DIR" && ls -la "$APP_DIR" || true
+          APP_PATH=$(find "$APP_DIR" -mindepth 1 -maxdepth 1 -type d -name "*.app" -print -quit)
+          if [[ -z "${APP_PATH:-}" ]]; then
             echo "No .app found in $APP_DIR" >&2
             exit 1
           fi
+          echo "Found app: $APP_PATH"
           APP_NAME=$(basename "$APP_PATH" .app)
           IPA_NAME="${APP_NAME}-unsigned-${CONFIGURATION}.ipa"
           WORKDIR="$RUNNER_TEMP/payload"
           mkdir -p "$WORKDIR/Payload"
+          # Copy the .app directory into Payload
           rsync -a "$APP_PATH" "$WORKDIR/Payload/"
           (cd "$WORKDIR" && zip -qry "$IPA_NAME" Payload)
           echo "IPA_PATH=$WORKDIR/$IPA_NAME" >> $GITHUB_ENV
@@ -81,7 +83,7 @@ jobs:
         run: |
           set -euo pipefail
           DSYM_DIR="$DERIVED_DATA/Build/Products/$CONFIGURATION-iphoneos"
-          DSYM_PATH=$(ls -1 "$DSYM_DIR"/*.dSYM 2>/dev/null | head -n1 || true)
+          DSYM_PATH=$(find "$DSYM_DIR" -mindepth 1 -maxdepth 1 -type d -name "*.dSYM" -print -quit || true)
           if [[ -n "$DSYM_PATH" ]]; then
             DSYM_ZIP="$RUNNER_TEMP/$(basename "$DSYM_PATH").zip"
             /usr/bin/zip -qry "$DSYM_ZIP" "$DSYM_PATH"
