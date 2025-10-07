@@ -61,6 +61,10 @@ platform :ios do
     app_path = Dir[File.join(products, "*.app")].first
     UI.user_error!("No .app found at #{products}") unless app_path
 
+    # Prepare screenshots dir
+    out_dir = File.join(root, 'smoke_screens')
+    FileUtils.mkdir_p(out_dir)
+
     # Install and run a few navigations
     sh("xcrun simctl install #{udid} \"#{app_path}\"")
 
@@ -72,15 +76,24 @@ platform :ios do
     end
 
     bid = sh("/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' \"#{File.join(app_path, 'Info.plist')}\"").strip
+    def snap(udid, out_dir, name)
+      path = File.join(out_dir, name)
+      sh("xcrun simctl io #{udid} screenshot \"#{path}\"")
+      UI.message("Saved screenshot: #{path}")
+    end
+
     # 1) Home
     launch_ok(udid, bid, "--disable-animations")
+    snap(udid, out_dir, "home.png")
     # 2) Auto-navigate to level 1
     launch_ok(udid, bid, "--disable-animations --auto-level 1")
+    snap(udid, out_dir, "level1.png")
     # 3) Auto-navigate to level 5
     launch_ok(udid, bid, "--disable-animations --auto-level 5")
+    snap(udid, out_dir, "level5.png")
 
     # If we got here without a non-zero exit, consider smoke passing.
-    UI.success("UI smoke completed on simulator: #{sim_name}")
+    UI.success("UI smoke completed on simulator: #{sim_name}. Screenshots in #{out_dir}")
   end
   desc "Capture iPad screenshots via simctl"
   lane :ipad_screenshots do |options|
