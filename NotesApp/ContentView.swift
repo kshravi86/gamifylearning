@@ -37,6 +37,15 @@ struct ContentView: View {
                     }
                 }
             }
+            // Provide destination mapping for Int values triggered by nested links
+            .navigationDestination(for: Int.self) { lvl in
+                if let deck = FlashcardsRepository.levels.first(where: { $0.level == lvl }) {
+                    FlashcardsGameView(deck: deck) { score in
+                        let best = max(ProgressStore.shared.best(for: deck.level), score)
+                        ProgressStore.shared.setBest(best, for: deck.level)
+                    }
+                }
+            }
         }
     }
 }
