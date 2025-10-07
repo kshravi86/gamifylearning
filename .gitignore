@@ -1,0 +1,37 @@
+# General
+.DS_Store
+build/
+DerivedData/
+Products/
+
+# Xcode
+*.xcworkspace/xcuserdata/
+*.xcuserdatad/
+*.xcscmblueprint
+*.xccheckout
+
+# SwiftPM
+.swiftpm/
+Package.resolved
+
+# Logs/archives
+*.log
+*.zip
+*.ipa
+logs/
+logs.txt
+logs.zip
+
+# Certificates/keys (do NOT commit secrets)
+*.p12
+*.pem
+*.b64
+*.csr
+private.key
+profile.b64
+
+# Temporary
+tmp*/
+attachments.zip
+fastlanepics/
+
