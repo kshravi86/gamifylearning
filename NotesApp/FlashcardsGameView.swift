@@ -12,9 +12,7 @@ struct FlashcardsGameView: View {
     @State private var correctOption: String = ""
     @State private var selectedIndex: Int? = nil
 
-    var body: some View {
-        VStack(spacing: 16) {
-            header
+    var body: some View { ZStack {\n            WaterTheme.gradient(for: .light).ignoresSafeArea()\n            VStack(spacing: 16) {\n                header
             card
             controls
             progress
@@ -53,8 +51,7 @@ struct FlashcardsGameView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: 200)
                 .padding()
-                .background(.thinMaterial)
-                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                \.background(\n                WaterTheme.cardBackground()\n            )\n            \.overlay(WaterTheme.softStroke())
             )
         }
         return AnyView(
@@ -91,8 +88,7 @@ struct FlashcardsGameView: View {
             }
             .padding(16)
             .frame(maxWidth: .infinity, maxHeight: 320)
-            .background(.thinMaterial)
-            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            \.background(\n                WaterTheme.cardBackground()\n            )\n            \.overlay(WaterTheme.softStroke())
         )
     }
 

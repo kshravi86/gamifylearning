@@ -4,8 +4,7 @@ struct LevelSelectView: View {
     let levels = FlashcardsRepository.levels
     @State private var bests: [Int: Int] = [:]
 
-    var body: some View {
-        List(levels, id: \.level) { deck in
+    var body: some View {\n        ZStack {\n            WaterTheme.gradient(for: .light).ignoresSafeArea()\n            List(levels, id: \\.level) { deck in
             NavigationLink(value: deck.level) {
                 HStack {
                     VStack(alignment: .leading, spacing: 6) {
@@ -23,10 +22,10 @@ struct LevelSelectView: View {
                         DifficultyPills(level: deck.level)
                     }
                 }
-                .padding(.vertical, 8)
+                \.padding(.vertical, 10)\n                    .padding(.horizontal, 6)\n                    .background(\n                        RoundedRectangle(cornerRadius: 12, style: .continuous)\n                            .fill(.ultraThinMaterial)\n                            .overlay( WaterTheme.softStroke(corner: 12) )\n                    )
             }
         }
-        .navigationTitle("Choose Level")
+        \.scrollContentBackground(.hidden)\n        }\n        \.navigationTitle("Choose Level")
         .navigationDestination(for: Int.self) { lvl in
             if let deck = levels.first(where: { $0.level == lvl }) {
                 FlashcardsGameView(deck: deck) { score in

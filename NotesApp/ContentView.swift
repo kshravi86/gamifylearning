@@ -5,28 +5,37 @@ struct ContentView: View {
 
     var body: some View {
         NavigationStack(path: $navPath) {
-            VStack(spacing: 20) {
-                Text("Python Flashcards")
-                    .font(.largeTitle.bold())
-                Text("10 levels • increasing difficulty")
-                    .foregroundStyle(.secondary)
-                NavigationLink {
-                    LevelSelectView()
-                } label: {
-                    Text("Start Learning")
-                        .font(.headline)
-                        .padding(.horizontal, 24)
-                        .padding(.vertical, 12)
-                        .frame(maxWidth: .infinity)
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                }
-                .padding(.top, 8)
+            ZStack {
+                WaterTheme.gradient(for: .light).ignoresSafeArea()
+                VStack(spacing: 20) {
+                    Text("Python Flashcards")
+                        .font(.largeTitle.bold())
+                        .foregroundStyle(
+                            LinearGradient(colors: [.blue, .indigo], startPoint: .topLeading, endPoint: .bottomTrailing)
+                        )
+                    Text("10 levels • increasing difficulty")
+                        .foregroundStyle(.secondary)
+                    NavigationLink {
+                        LevelSelectView()
+                    } label: {
+                        Text("Start Learning")
+                            .font(.headline)
+                            .padding(.horizontal, 24)
+                            .padding(.vertical, 12)
+                            .frame(maxWidth: .infinity)
+                            .background(
+                                LinearGradient(colors: [.blue, .indigo], startPoint: .leading, endPoint: .trailing)
+                            )
+                            .foregroundColor(.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                            .shadow(color: .blue.opacity(0.25), radius: 12, x: 0, y: 6)
+                    }
+                    .padding(.top, 8)
 
-                Spacer()
+                    Spacer()
+                }
+                .padding()
             }
-            .padding()
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink("Levels") {
@@ -49,6 +58,7 @@ struct ContentView: View {
                 }
             }
             .onAppear { applyLaunchNavigation() }
+            .tint(WaterTheme.tint)
         }
     }
 }
