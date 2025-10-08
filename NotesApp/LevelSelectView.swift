@@ -4,37 +4,39 @@ struct LevelSelectView: View {
     let levels = FlashcardsRepository.levels
     @State private var bests: [Int: Int] = [:]
 
-    var body: some View {\n        ZStack {\n            WaterTheme.gradient(for: .light).ignoresSafeArea()\n            List(levels, id: \\.level) { deck in
-            NavigationLink(value: deck.level) {
-                HStack {
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text("Level \(deck.level): \(deck.title)")
-                            .font(.headline)
-                        Text(deck.description)
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
+    var body: some View {
+        ZStack {
+            WaterTheme.gradient(for: .light).ignoresSafeArea()
+            List(levels, id: \.level) { deck in
+                NavigationLink(value: deck.level) {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("Level \(deck.level): \(deck.title)")
+                                .font(.headline)
+                            Text(deck.description)
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        VStack(alignment: .trailing) {
+                            Text("Best: \(bests[deck.level] ?? 0)/\(deck.cards.count)")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                            DifficultyPills(level: deck.level)
+                        }
                     }
-                    Spacer()
-                    VStack(alignment: .trailing) {
-                        Text("Best: \(bests[deck.level] ?? 0)/\(deck.cards.count)")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                        DifficultyPills(level: deck.level)
-                    }
-                }
-                \.padding(.vertical, 10)\n                    .padding(.horizontal, 6)\n                    .background(\n                        RoundedRectangle(cornerRadius: 12, style: .continuous)\n                            .fill(.ultraThinMaterial)\n                            .overlay( WaterTheme.softStroke(corner: 12) )\n                    )
-            }
-        }
-        \.scrollContentBackground(.hidden)\n        }\n        \.navigationTitle("Choose Level")
-        .navigationDestination(for: Int.self) { lvl in
-            if let deck = levels.first(where: { $0.level == lvl }) {
-                FlashcardsGameView(deck: deck) { score in
-                    let best = max(ProgressStore.shared.best(for: deck.level), score)
-                    ProgressStore.shared.setBest(best, for: deck.level)
-                    reloadBests()
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 6)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12, style: .continuous)
+                            .fill(.ultraThinMaterial)
+                            .overlay(WaterTheme.softStroke(corner: 12))
+                    )
                 }
             }
+            .scrollContentBackground(.hidden)
         }
+        .navigationTitle("Choose Level")
         .onAppear { reloadBests() }
     }
 
