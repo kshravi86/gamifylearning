@@ -87,39 +87,38 @@ struct TodayView: View {
                 Spacer()
             }
             .padding()
-            }
-            .overlay(
-                Group {
-                    if showCelebration {
-                        CelebrationOverlay(isVisible: $showCelebration)
-                    }
-                }
-            )
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        settings.lastWorkout = Date()
-                        try? viewContext.save()
-                        NotificationManager.shared.schedulePostWorkoutReminder(after: 15)
-                    } label: {
-                        Label("Workout", systemImage: "figure.run")
-                    }
+        }
+        .overlay(
+            Group {
+                if showCelebration {
+                    CelebrationOverlay(isVisible: $showCelebration)
                 }
             }
-            .sheet(isPresented: $showAdd) {
-                AddDrinkSheet(selectedDrink: $selectedDrink, selectedSize: $selectedSize) { drink, size in
-                    addDrink(drink: drink, size: size)
+        )
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    settings.lastWorkout = Date()
+                    try? viewContext.save()
+                    NotificationManager.shared.schedulePostWorkoutReminder(after: 15)
+                } label: {
+                    Label("Workout", systemImage: "figure.run")
                 }
             }
-            .toast($toast)
-            .tint(WaterTheme.tint)
-            .onAppear {
-                if triggerAddOnAppear {
-                    DispatchQueue.main.async { showAdd = true }
-                }
-                if triggerCelebrateOnAppear {
-                    DispatchQueue.main.async { showCelebration = true }
-                }
+        }
+        .sheet(isPresented: $showAdd) {
+            AddDrinkSheet(selectedDrink: $selectedDrink, selectedSize: $selectedSize) { drink, size in
+                addDrink(drink: drink, size: size)
+            }
+        }
+        .toast($toast)
+        .tint(WaterTheme.tint)
+        .onAppear {
+            if triggerAddOnAppear {
+                DispatchQueue.main.async { showAdd = true }
+            }
+            if triggerCelebrateOnAppear {
+                DispatchQueue.main.async { showCelebration = true }
             }
         }
     }
