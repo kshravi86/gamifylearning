@@ -14,7 +14,6 @@ struct FlashcardsGameView: View {
 
     var body: some View {
         ZStack {
-            WaterTheme.gradient(for: .light).ignoresSafeArea()
             VStack(spacing: 16) {
                 header
                 card
@@ -95,7 +94,7 @@ struct FlashcardsGameView: View {
                         .frame(maxWidth: .infinity)
                         .background(backgroundColor(for: i))
                         .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-                        .shadow(color: .blue.opacity(0.08), radius: 8, x: 0, y: 4)
+                        .shadow(color: .black.opacity(0.06), radius: 4, x: 0, y: 2)
                     }
                     .disabled(selectedIndex != nil)
                 }
@@ -185,11 +184,11 @@ struct FlashcardsGameView: View {
     }
 
     private func backgroundColor(for i: Int) -> Color {
-        guard let sel = selectedIndex else { return Color.gray.opacity(0.12) }
+        guard let sel = selectedIndex else { return Color(.secondarySystemFill) }
         let isCorrect = options[i] == correctOption
         if isCorrect { return Color.green.opacity(0.18) }
         if sel == i { return Color.red.opacity(0.18) }
-        return Color.gray.opacity(0.12)
+        return Color(.secondarySystemFill)
     }
 
     private func foregroundColor(for i: Int) -> Color {
@@ -235,4 +234,3 @@ private struct ResultSheet: View {
         }
     }
 }
-

@@ -16,8 +16,7 @@ struct SettingsView: View {
     }
 
     var body: some View {
-        NavigationView {
-            Form {
+        Form {
                 Section(header: Text("Profile")) {
                     HStack {
                         Text("Weight (kg)")
@@ -75,11 +74,8 @@ struct SettingsView: View {
                         Link("Email Support", destination: mail)
                     }
                 }
-            }
-            .navigationTitle("Settings")
-            .onAppear(perform: loadFromStore)
         }
-        .navigationViewStyle(.stack)
+        .onAppear(perform: loadFromStore)
     }
 
     private func loadFromStore() {

@@ -23,7 +23,6 @@ struct TodayView: View {
         )
     }
 
-    @Environment(\.colorScheme) private var colorScheme
     @State private var ringPulse = false
     @State private var showCelebration = false
 
@@ -46,10 +45,8 @@ struct TodayView: View {
     }
 
     var body: some View {
-        NavigationView {
-            ZStack {
-                WaterTheme.gradient(for: colorScheme).ignoresSafeArea()
-                VStack(spacing: 24) {
+        ZStack {
+            VStack(spacing: 24) {
                 ZStack {
                     Circle()
                         .stroke(Color.gray.opacity(0.2), lineWidth: 16)
@@ -98,7 +95,6 @@ struct TodayView: View {
                     }
                 }
             )
-            .navigationTitle("Hydration")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
@@ -126,7 +122,6 @@ struct TodayView: View {
                 }
             }
         }
-        .navigationViewStyle(.stack)
     }
 
     private var progressLabel: String {
@@ -197,7 +192,7 @@ struct AddDrinkSheet: View {
     let sizes = [150, 200, 250, 300, 350, 400, 500, 600]
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Form {
                 Picker("Drink", selection: $selectedDrink) {
                     ForEach(drinks, id: \.self) { Text($0.capitalized).tag($0) }

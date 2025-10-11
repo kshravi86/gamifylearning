@@ -5,9 +5,7 @@ struct LevelSelectView: View {
     @State private var bests: [Int: Int] = [:]
 
     var body: some View {
-        ZStack {
-            WaterTheme.gradient(for: .light).ignoresSafeArea()
-            List(levels, id: \.level) { deck in
+        List(levels, id: \.level) { deck in
                 NavigationLink(destination:
                     FlashcardsGameView(deck: deck) { score in
                         let best = max(ProgressStore.shared.best(for: deck.level), score)
@@ -31,18 +29,11 @@ struct LevelSelectView: View {
                             DifficultyPills(level: deck.level)
                         }
                     }
-                    .padding(.vertical, 10)
-                    .padding(.horizontal, 6)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12, style: .continuous)
-                            .fill(.ultraThinMaterial)
-                            .overlay(WaterTheme.softStroke(corner: 12))
-                    )
+                    .padding(.vertical, 4)
                 }
-            }
-            .scrollContentBackground(.hidden)
         }
         .navigationTitle("Choose Level")
+        .listStyle(.insetGrouped)
         .onAppear { reloadBests() }
     }
 

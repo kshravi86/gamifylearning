@@ -9,8 +9,7 @@ struct HistoryView: View {
     private var entries: FetchedResults<HydrationEntry>
 
     var body: some View {
-        NavigationView {
-            List {
+        List {
                 ForEach(entries) { entry in
                     VStack(alignment: .leading, spacing: 4) {
                         HStack {
@@ -35,11 +34,8 @@ struct HistoryView: View {
                     .padding(.vertical, 4)
                 }
                 .onDelete(perform: delete)
-            }
-            .navigationTitle("History")
-            .toolbar { EditButton() }
         }
-        .navigationViewStyle(.stack)
+        .toolbar { EditButton() }
     }
 
     private func delete(at offsets: IndexSet) {

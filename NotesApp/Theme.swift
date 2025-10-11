@@ -27,13 +27,10 @@ enum WaterTheme {
     static func cardBackground() -> some View {
         RoundedRectangle(cornerRadius: 16, style: .continuous)
             .fill(.ultraThinMaterial)
-            .overlay(
-                LinearGradient(colors: [Color.blue.opacity(0.15), Color.cyan.opacity(0.10)], startPoint: .topLeading, endPoint: .bottomTrailing)
-            )
     }
 
     static func softStroke(corner: CGFloat = 16) -> some View {
         RoundedRectangle(cornerRadius: corner, style: .continuous)
-            .strokeBorder(LinearGradient(colors: [Color.cyan.opacity(0.35), Color.blue.opacity(0.25)], startPoint: .topLeading, endPoint: .bottomTrailing), lineWidth: 1)
+            .strokeBorder(Color.primary.opacity(0.06), lineWidth: 1)
     }
 }

@@ -30,6 +30,8 @@
         FCF000010000000000000007 /* ErrorLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF000010000000000000008 /* ErrorLogger.swift */; };
         FCF000010000000000000009 /* CrashHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF00001000000000000000A /* CrashHandler.swift */; };
         FCF00001000000000000000B /* ErrorLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF00001000000000000000C /* ErrorLogView.swift */; };
+        FCF00001000000000000000D /* AnimatedProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF00001000000000000000E /* AnimatedProgressBar.swift */; };
+        FCF00001000000000000000D /* AnimatedProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF00001000000000000000E /* AnimatedProgressBar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +60,7 @@
         FCF000010000000000000002 /* FlashcardsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardsData.swift; sourceTree = "<group>"; };
         FCF000010000000000000004 /* LevelSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelSelectView.swift; sourceTree = "<group>"; };
         FCF000010000000000000006 /* FlashcardsGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardsGameView.swift; sourceTree = "<group>"; };
+        FCF00001000000000000000E /* AnimatedProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedProgressBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +116,7 @@
                 FCF000010000000000000008 /* ErrorLogger.swift */,
                 FCF00001000000000000000A /* CrashHandler.swift */,
                 FCF00001000000000000000C /* ErrorLogView.swift */,
+                FCF00001000000000000000E /* AnimatedProgressBar.swift */,
 			);
 			path = NotesApp;
 			sourceTree = "<group>";
