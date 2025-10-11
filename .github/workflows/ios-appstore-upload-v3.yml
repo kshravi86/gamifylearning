@@ -111,10 +111,14 @@ jobs:
           -archivePath ${{ runner.temp }}/NotesApp-Release.xcarchive \
           CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO \
           CURRENT_PROJECT_VERSION=$NEW_BUILD
+        echo "ARCHIVE_PATH=${{ runner.temp }}/NotesApp-Release.xcarchive" >> $GITHUB_ENV
 
     - name: Extract App Metadata (version/build/bundle)
       run: |
-        PLIST="${{ runner.temp }}/NotesApp-Release.xcarchive/Products/Applications/NotesApp.app/Info.plist"
+        ARCHIVE_PATH="${ARCHIVE_PATH:-${{ runner.temp }}/NotesApp-Release.xcarchive}"
+        APP_PATH=$(find "$ARCHIVE_PATH/Products/Applications" -maxdepth 1 -type d -name "*.app" -print -quit)
+        if [ -z "$APP_PATH" ]; then echo "::error title=App bundle not found::No .app inside $ARCHIVE_PATH"; exit 1; fi
+        PLIST="$APP_PATH/Info.plist"
         if [ ! -f "$PLIST" ]; then echo "::error title=Info.plist not found::$PLIST"; exit 1; fi
         APP_VERSION=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$PLIST")
         APP_BUILD=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$PLIST")
@@ -163,7 +167,7 @@ jobs:
     - name: Export Signed IPA
       run: |
         xcodebuild -exportArchive \
-          -archivePath ${{ runner.temp }}/NotesApp-Release.xcarchive \
+          -archivePath "${ARCHIVE_PATH:-${{ runner.temp }}/NotesApp-Release.xcarchive}" \
           -exportPath ${{ runner.temp }}/export-release \
           -exportOptionsPlist $RUNNER_TEMP/export-options.plist
         IPA_PATH=$(ls ${{ runner.temp }}/export-release/*.ipa | head -n 1)
