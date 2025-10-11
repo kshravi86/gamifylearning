@@ -74,7 +74,7 @@ jobs:
     - name: Upload Debug Archive
       uses: actions/upload-artifact@v4
       with:
-        name: QuizApp-Debug-Archive
+        name: PyDeck-Debug-Archive
         path: ${{ runner.temp }}/NotesApp-Debug.xcarchive
         retention-days: 30
         
@@ -82,7 +82,7 @@ jobs:
       uses: actions/upload-artifact@v4
       if: success()
       with:
-        name: QuizApp-Debug-IPA
+        name: PyDeck-Debug-IPA
         path: ${{ runner.temp }}/export-debug/*.ipa
         retention-days: 30
 

@@ -356,7 +356,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"NotesApp/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = HydrateIQ;
+                INFOPLIST_KEY_CFBundleDisplayName = PyDeck;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -369,8 +369,8 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.venki18.hydrateiq.T37PH5FAJX;
-				PRODUCT_NAME = HydrateIQ;
+                PRODUCT_BUNDLE_IDENTIFIER = com.venki18.pydeck;
+                PRODUCT_NAME = PyDeck;
 				PRODUCT_BUNDLE_PACKAGE_TYPE = APPL;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -391,7 +391,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"NotesApp/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = HydrateIQ;
+                INFOPLIST_KEY_CFBundleDisplayName = PyDeck;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -404,8 +404,8 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.venki18.hydrateiq.T37PH5FAJX;
-				PRODUCT_NAME = HydrateIQ;
+                PRODUCT_BUNDLE_IDENTIFIER = com.venki18.pydeck;
+                PRODUCT_NAME = PyDeck;
 				PRODUCT_BUNDLE_PACKAGE_TYPE = APPL;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
